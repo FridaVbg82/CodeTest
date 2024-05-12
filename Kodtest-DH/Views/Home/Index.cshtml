@@ -1,0 +1,52 @@
+﻿@model Kodtest_DH.Models.PersonViewModel
+@{
+    ViewData["Title"] = "Hem";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Kodtest</h1>
+    <h4>Lägg till ny person</h4>
+    <hr />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-6">
+                <form id="addUser">
+                    @Html.LabelFor(model => model.Name)
+                    <input type="text" id="Name" name="Name" />
+                    @Html.LabelFor(model => model.PhoneNumber)
+                    <input type="text" id="PhoneNumber" name="PhoneNumber" />
+                    <button type="submit" class="btn btn-primary">Spara</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="PersonalList"></div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#addUser').submit(function () {
+                $.ajax({
+                    method: "POST",
+                    url: "/Home/Create",
+                    data: $(this).serialize()
+                    success: function (result) {
+                        $('#PersonalList').html(result);
+                    }
+                });
+                return false;
+            });
+            $.ajax({
+                method: "GET",
+                url: "/Home/PersonalList",
+                data: $(this).serialize(),
+                success: function (result) {
+                    $('#PersonalList').html(result);
+                }
+            });
+        });
+    </script>
+}
